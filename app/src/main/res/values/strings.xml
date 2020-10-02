@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Grade Tracker</string>
-
+    <string name="Term">Term</string>
 </resources>

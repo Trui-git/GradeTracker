@@ -1,6 +1,8 @@
 package com.trios.gradetracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +18,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -43,9 +47,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(
+            new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+
+                }
+            });
         dbSetup();
-        showTable();
         getTerms();
+        showTable();
         //listTerms();
     } // onCreate()
 
@@ -150,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 */
+    @SuppressLint("SetTextI18n")
     public void showTable() {
         TableLayout  tl = (TableLayout) findViewById(R.id.displayTable);
         //TableRow.LayoutParams layoutParams = new TableRow.LayoutParams();
@@ -161,8 +176,9 @@ public class MainActivity extends AppCompatActivity {
         //layoutParams.topMargin = 10;
 
         TableRow tbrow0 = new TableRow(this);
+        tbrow0.setBackgroundColor(Color.LTGRAY);
         TextView tv0 = new TextView(this);
-        tv0.setText(" Sl.No ");
+        tv0.setText(" Term ");
         tv0.setTextColor(Color.BLACK);
         tv0.setGravity(Gravity.CENTER);
         tv0.setTextSize(20);
@@ -170,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
         tbrow0.addView(tv0);
 
         TextView tv1 = new TextView(this);
-        tv1.setText(" Product ");
+        tv1.setText(" Course Done ");
         tv1.setTextColor(Color.BLACK);
         tv1.setGravity(Gravity.CENTER);
         tv1.setTextSize(20);
@@ -178,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         tbrow0.addView(tv1);
 
         TextView tv2 = new TextView(this);
-        tv2.setText(" Unit Price ");
+        tv2.setText(" Course To Go ");
         tv2.setTextColor(Color.BLACK);
         tv2.setGravity(Gravity.CENTER);
         tv2.setTextSize(20);
@@ -186,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         tbrow0.addView(tv2);
 
         TextView tv3 = new TextView(this);
-        tv3.setText(" Stock Remaining ");
+        tv3.setText(" Goal(%) ");
         tv3.setTextColor(Color.BLACK);
         tv3.setGravity(Gravity.CENTER);
         tv3.setTextSize(20);
@@ -196,18 +212,13 @@ public class MainActivity extends AppCompatActivity {
         tl.addView(tbrow0);
 
 
-        for (int i = 0; i < 5; i++) {
-            //TableRow tableRow = new TableRow(this);
-            //TextView textView = new TextView(this);
-            //textView.setText("Test stretch scroll view " + i);
-            //textView.setTextSize(20);
-            //textView.setPadding(15, 15, 15, 15);
+        for (int i = 0; i < termNames.size(); i++) {
 
             TableRow tableRow = new TableRow(this);
             tableRow.setClickable(true);
 
             TextView t1v = new TextView(this);
-            t1v.setText("" + i);
+            t1v.setText(termNames.get(i));
             t1v.setTextColor(Color.BLACK);
             t1v.setGravity(Gravity.CENTER);
             t1v.setTextSize(20);
@@ -215,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
             tableRow.addView(t1v);
 
             TextView t2v = new TextView(this);
-            t2v.setText("Product " + i);
+            t2v.setText(takenCounts.get(i));
             t2v.setTextColor(Color.BLACK);
             t2v.setGravity(Gravity.CENTER);
             t2v.setTextSize(20);
@@ -223,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
             tableRow.addView(t2v);
 
             TextView t3v = new TextView(this);
-            t3v.setText("Rs." + i);
+            t3v.setText(totalCourses.get(i));
             t3v.setTextColor(Color.BLACK);
             t3v.setGravity(Gravity.CENTER);
             t3v.setTextSize(20);
@@ -231,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
             tableRow.addView(t3v);
 
             TextView t4v = new TextView(this);
-            t4v.setText("" + i * 15 / 32 * 10);
+            t4v.setText(goals.get(i));
             t4v.setTextColor(Color.BLACK);
             t4v.setGravity(Gravity.CENTER);
             t4v.setTextSize(20);
