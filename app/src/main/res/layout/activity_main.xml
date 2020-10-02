@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.trios.gradetracker.MainActivity">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/displayTable"
+        android:stretchColumns="1,2,3,4" >
+
+
+
+    </TableLayout>
+
+    <!--
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="900dp"
+            android:id="@+id/list_view_terms">
+        </ListView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_text_term_name"
+                android:text="enter the name"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_text_num_of_courses"
+                android:text="enter the number of courses"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_text_target_grade"
+                android:text="enter your target grade"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:id="@+id/create_button"
+                android:text="Create"
+                android:onClick="CreateTerm"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+-->
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
