@@ -1,5 +1,6 @@
 package com.trios.gradetracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,6 +10,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -22,6 +27,7 @@ public class ProgressActivity extends AppCompatActivity {
     private SQLiteDatabase db = null;
     private final String DB_NAME = "gradeTrackerDB";
     int termID;
+    private int visible = 0;
 
     ArrayList<String> courseNames = new ArrayList<>();
     ArrayList<Integer> grades = new ArrayList<>();
@@ -29,16 +35,35 @@ public class ProgressActivity extends AppCompatActivity {
     int dummyGrade = 67;
     int totalCourses = 0;
 
+    private static EditText courseName;
+    private static EditText grade;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress);
+
+        // restore visibility of edit text fields in linearlayout after rotation
+        if (savedInstanceState != null) {
+            int mVisible = savedInstanceState.getInt("visible");
+            if (mVisible == 1){
+                LinearLayout textInput = (LinearLayout) findViewById(R.id.text_term_content_input);
+                textInput.setVisibility(View.VISIBLE);
+                visible = 1;
+            }
+        }
 
         Bundle extras = getIntent().getExtras();
         if(extras != null)
         {
             termID = extras.getInt("termID");
         }
+
+        // hide the keyboard after rotation
+        Window window = getWindow();
+        if (window != null) {
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        } // hide the keyboard after rotation
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_grade);
         fab.setOnClickListener(
@@ -47,7 +72,9 @@ public class ProgressActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view)
                     {
-
+                        LinearLayout textInput = (LinearLayout) findViewById(R.id.text_term_content_input);
+                        textInput.setVisibility(View.VISIBLE);
+                        visible = 1;
                     }
                 });
 
@@ -57,6 +84,12 @@ public class ProgressActivity extends AppCompatActivity {
         // Example of a call to a native method
         String hello = stringFromJNI();
     }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("visible", visible);
+    }  // save visibility of edit text fields in linearlayout
 
     public void GetGrades() {
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
@@ -92,6 +125,24 @@ public class ProgressActivity extends AppCompatActivity {
 */
         db.close();
     } // GetGrades()
+
+    public void CreateTermContent(View v) {
+        courseName = (EditText) findViewById(R.id.edit_text_course_name);
+        grade = (EditText) findViewById(R.id.edit_text_grade);
+
+        String name = courseName.getText().toString();
+        int number = Integer.parseInt(grade.getText().toString());
+
+        db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
+        int id = termID + 1; // termID is index of array from main activity
+        db.execSQL("INSERT INTO tblGrade VALUES(?1, '" + name + "', " + number + ", " + id + ");");
+        db.close();
+
+        Intent refreshPage =
+                new Intent(ProgressActivity.this, ProgressActivity.class);
+        startActivity(refreshPage);
+    } // CreateTermContent()
+
 
     public void showTermContent() {
         TableLayout tl = (TableLayout) findViewById(R.id.displayTerm);

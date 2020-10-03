@@ -7,4 +7,8 @@
     <string name="targetGrade">enter target grade</string>
     <string name="createTerm">Create</string>
 
+    <string name="courseName">enter course name</string>
+    <string name="grade">enter grade</string>
+    <string name="CreateTermContent">Create</string>
+
 </resources>

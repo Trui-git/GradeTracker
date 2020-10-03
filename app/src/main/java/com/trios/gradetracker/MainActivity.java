@@ -61,10 +61,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         // hide the keyboard after rotation
-        //Window window = getWindow();
-        //if (window != null) {
-        //    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        //} // hide the keyboard after rotation
+        Window window = getWindow();
+        if (window != null) {
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        } // hide the keyboard after rotation
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(
