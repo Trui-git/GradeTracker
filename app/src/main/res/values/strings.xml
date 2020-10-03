@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Grade Tracker</string>
     <string name="Term">Term</string>
+    <string name="TermTable">Term Table</string>
+    <string name="termName">enter term name</string>
+    <string name="numberOFCourses">enter number of courses</string>
+    <string name="targetGrade">enter target grade</string>
+    <string name="createTerm">Create</string>
+
 </resources>

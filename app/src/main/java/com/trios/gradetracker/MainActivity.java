@@ -1,5 +1,6 @@
 package com.trios.gradetracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -10,9 +11,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -27,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SQLiteDatabase db = null;
     private final String DB_NAME = "gradeTrackerDB";
-
+    private int visible = 0;
     // term name, 5/8 (courses done, courses to go), goal
     // Year 1, 5 of 8, goal: 95%
     // Year 2, 0 of 8, goal: 95%
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> takenCounts = new ArrayList<>();
     ArrayList<String> totalCourses = new ArrayList<>();
     ArrayList<String> goals = new ArrayList<>();
-    private ArrayList<String> terms = new ArrayList<>();
+    //private ArrayList<String> terms = new ArrayList<>();
 
     private static EditText termName;
     private static EditText numOfCourses;
@@ -47,6 +51,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // restore visibility of edit text fields in linearlayout after rotation
+        if (savedInstanceState != null) {
+            int mVisible = savedInstanceState.getInt("visible");
+            if (mVisible == 1){
+                LinearLayout textInput = (LinearLayout) findViewById(R.id.text_input);
+                textInput.setVisibility(View.VISIBLE);
+                visible = 1;
+            }
+        }
+        // hide the keyboard after rotation
+        //Window window = getWindow();
+        //if (window != null) {
+        //    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        //} // hide the keyboard after rotation
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(
             new View.OnClickListener()
@@ -54,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view)
                 {
-
+                    LinearLayout textInput = (LinearLayout) findViewById(R.id.text_input);
+                    textInput.setVisibility(View.VISIBLE);
+                    visible = 1;
                 }
             });
         dbSetup();
@@ -62,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
         showTable();
         //listTerms();
     } // onCreate()
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("visible", visible);
+    }  // save visibility of edit text fields in linearlayout
 
     public void dbSetup() {
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
@@ -80,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         db.close();
     }
-/*
+
     public void CreateTerm(View v) {
         termName = (EditText) findViewById(R.id.edit_text_term_name);
         numOfCourses = (EditText) findViewById(R.id.edit_text_num_of_courses);
@@ -96,8 +123,11 @@ public class MainActivity extends AppCompatActivity {
                 goal + "," + number + ", 'A');");
 
         db.close();
+        Intent refreshPage =
+                new Intent(MainActivity.this, MainActivity.class);
+        startActivity(refreshPage);
     } // CreateTerm()
-*/
+
     public void getTerms() {
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
 
@@ -132,11 +162,12 @@ public class MainActivity extends AppCompatActivity {
                 } // if we can move to first
             } // if courses taken NOT null
         } // for - termIDs
-
+/*
         for(int i = 0; i < termIDs.size(); i++) {
             terms.add(termNames.get(i) + " [ " + takenCounts.get(i) + "/" + totalCourses.get(i) + " ]" +
                     " goal: " + goals.get(i) + "%");
         }
+*/
         db.close();
     } // getTerms()
 /*
@@ -249,7 +280,9 @@ public class MainActivity extends AppCompatActivity {
             t4v.setPadding(15, 15, 15, 15);
             tableRow.addView(t4v);
 
+            tableRow.setId(i);
             tl.addView(tableRow);
+
 
             //tableRow.addView(t1v, layoutParams);
             if (i % 2 != 0) {
@@ -262,7 +295,11 @@ public class MainActivity extends AppCompatActivity {
             tableRow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(),"Hello Javatpoint",Toast.LENGTH_SHORT).show();
+                    int tableId = v.getId();
+                    Intent gotoProgress =
+                            new Intent(MainActivity.this, ProgressActivity.class);
+                    gotoProgress.putExtra("termID", tableId);
+                    startActivity(gotoProgress);
                 }
             });
 

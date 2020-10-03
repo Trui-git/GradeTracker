@@ -11,8 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="300dp"
         android:stretchColumns="1,2,3,4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,6 +23,7 @@
         app:layout_constraintVertical_bias="1.0">
 
     </TableLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -35,54 +37,61 @@
         app:backgroundTint="#2196F3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.852"
+        app:layout_constraintHorizontal_bias="0.915"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/displayTable"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.646" />
 
-    <!--
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:id="@+id/text_input"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="200dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="start"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/displayTable">
 
-        <ListView
+        <EditText
+            android:id="@+id/edit_text_term_name"
             android:layout_width="match_parent"
-            android:layout_height="900dp"
-            android:id="@+id/list_view_terms">
-        </ListView>
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/termName"
+            android:hint="@string/termName"
+            android:inputType="text" />
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/edit_text_num_of_courses"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/numberOFCourses"
+            android:hint="@string/numberOFCourses"
+            android:inputType="number" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/edit_text_term_name"
-                android:text="enter the name"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/edit_text_num_of_courses"
-                android:text="enter the number of courses"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/edit_text_target_grade"
-                android:text="enter your target grade"/>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="67dp"
-                android:id="@+id/create_button"
-                android:text="Create"
-                android:onClick="CreateTerm"/>
+        <EditText
+            android:id="@+id/edit_text_target_grade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/targetGrade"
+            android:hint="@string/targetGrade"
+            android:inputType="number" />
 
-        </LinearLayout>
+        <Button
+            android:id="@+id/create_button"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:onClick="CreateTerm"
+            android:text="@string/createTerm" />
 
     </LinearLayout>
--->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
