@@ -85,6 +85,12 @@ public class MainActivity extends AppCompatActivity {
     } // onCreate()
 
     @Override
+    // close app
+    public void onBackPressed() {
+        finishAffinity();
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("visible", visible);
@@ -325,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent gotoProgress =
                             new Intent(MainActivity.this, ProgressActivity.class);
                     gotoProgress.putExtra("termID", tableId);
+                    gotoProgress.putExtra("goal", Integer.parseInt(goals.get(tableId)));
                     startActivity(gotoProgress);
                 }
             });

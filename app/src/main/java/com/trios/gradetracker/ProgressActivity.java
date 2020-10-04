@@ -27,7 +27,7 @@ public class ProgressActivity extends AppCompatActivity {
 
     private SQLiteDatabase db = null;
     private final String DB_NAME = "gradeTrackerDB";
-    int termID;
+    int termID, termGoal;
     private int visible = 0;
 
     ArrayList<String> courseNames = new ArrayList<>();
@@ -58,6 +58,7 @@ public class ProgressActivity extends AppCompatActivity {
         if(extras != null)
         {
             termID = extras.getInt("termID");
+            termGoal = extras.getInt("goal");
         }
 
         // hide the keyboard after rotation
@@ -81,10 +82,9 @@ public class ProgressActivity extends AppCompatActivity {
 
         GetGrades();
         showTermContent();
-
-        // Example of a call to a native method
-        String hello = stringFromJNI();
     }
+
+
 
     @Override
     // close app
@@ -101,17 +101,6 @@ public class ProgressActivity extends AppCompatActivity {
 
     public void GetGrades() {
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
-/*
-        Cursor n = db.rawQuery(
-                "SELECT courses FROM tblTerm WHERE termID = " +
-                        termID, null);
-
-        if(n != null) {
-            if(n.moveToFirst()) {
-                totalCourses = n.getInt(n.getColumnIndex("courses"));
-            }
-        }
-*/
         int id = termID + 1; // termID is index of array from main activity
         Cursor c = db.rawQuery(
                 "SELECT * FROM tblGrade WHERE termID = " +
@@ -125,18 +114,13 @@ public class ProgressActivity extends AppCompatActivity {
                 }while(c.moveToNext());
             }
         }
-/*
-        for(int i = 0; i < totalCourses - courseNames.size(); i++) {
-            courseNames.add(dummyName);
-            // call the C++ lib fun stuff to calc the new target goal thing ;)
-        }
-*/
         db.close();
     } // GetGrades()
 
     public void CreateTermContent(View v) {
         Cursor c;
         int id = termID + 1;
+        double goal = termGoal;
         courseName = (EditText) findViewById(R.id.edit_text_course_name);
         grade = (EditText) findViewById(R.id.edit_text_grade);
 
@@ -168,11 +152,24 @@ public class ProgressActivity extends AppCompatActivity {
         else{
             Toast.makeText(ProgressActivity.this,"no more place for course！", Toast.LENGTH_LONG).show();
         }
+
+        c = db.rawQuery("SELECT sum(grade) FROM tblGrade WHERE termID == "+ id +" AND courseName != 'Dummy' ", null);
+        if (c != null)
+            c.moveToFirst();
+        int takenTotal = Integer.parseInt(c.getString(0));
+        int takenCount = total - (totalDummy-1);
+        int toGocount = totalDummy - 1;
+        //call to a native method
+        //private native String CalcGrades(double goal, int takenCount, int takenTotal, int toGoCount);
+        String newTarget = CalcGrades(goal, takenCount, takenTotal, toGocount);
+        db.execSQL("UPDATE tblGrade SET grade = "+ Float.parseFloat(newTarget) +" WHERE termID == "+ id +" AND courseName == 'Dummy'");
+
         db.close();
 
         Intent refreshPage =
                 new Intent(ProgressActivity.this, ProgressActivity.class);
         refreshPage.putExtra("termID", termID);
+        refreshPage.putExtra("goal", termGoal);
         startActivity(refreshPage);
 
     } // CreateTermContent()
@@ -279,5 +276,6 @@ public class ProgressActivity extends AppCompatActivity {
      * A native method that is implemented by the 'grade-calc' native library,
      * which is packaged with this application.
      */
-    public native String stringFromJNI();
+    private native String CalcGrades(double goal, int takenCount, int takenTotal, int toGoCount);
+
 } // class
