@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CreateTerm(View v) {
+        Cursor c;
         termName = (EditText) findViewById(R.id.edit_text_term_name);
         numOfCourses = (EditText) findViewById(R.id.edit_text_num_of_courses);
         termGoal = (EditText) findViewById(R.id.edit_text_target_grade);
@@ -119,13 +120,38 @@ public class MainActivity extends AppCompatActivity {
 
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
 
-        db.execSQL("INSERT INTO tblTerm VALUES(?1, '" + name + "'," +
-                goal + "," + number + ", 'A');");
+        // check this term name exits, if exits don't insert
+        c = db.rawQuery("SELECT count(name) FROM tblTerm WHERE name == '" + name + "' ", null);
+        if (c != null)
+            c.moveToFirst();
+        int nameExits = Integer.parseInt(c.getString(0));
+        if (nameExits > 0){
+            db.close();
+            Toast.makeText(MainActivity.this,"term exists！", Toast.LENGTH_LONG).show();
+            Intent backToPage =
+                    new Intent(MainActivity.this, MainActivity.class);
+            startActivity(backToPage);
+        }
+        else{
 
-        db.close();
-        Intent refreshPage =
-                new Intent(MainActivity.this, MainActivity.class);
-        startActivity(refreshPage);
+            db.execSQL("INSERT INTO tblTerm VALUES(?1, '" + name + "'," +
+                    goal + "," + number + ", 'A');");
+
+            // get id which was just inserted item
+            c = db.rawQuery("SELECT termID FROM tblTerm WHERE name == '" + name + "' ", null);
+            if (c != null)
+                c.moveToFirst();
+            int id = Integer.parseInt(c.getString(0));
+
+            // insert tblGrade dummy items
+            for (int i=0;i<number; i++){
+                db.execSQL("INSERT INTO tblGrade VALUES(?1, 'Dummy', " + goal + ", " + id + ");");
+            }
+            db.close();
+            Intent refreshPage =
+                    new Intent(MainActivity.this, MainActivity.class);
+            startActivity(refreshPage);
+        }
     } // CreateTerm()
 
     public void getTerms() {

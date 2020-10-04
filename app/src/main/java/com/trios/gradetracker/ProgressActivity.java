@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -86,6 +87,13 @@ public class ProgressActivity extends AppCompatActivity {
     }
 
     @Override
+    // close app
+    public void onBackPressed() {
+        Intent backPage = new Intent(ProgressActivity.this, MainActivity.class);
+        startActivity(backPage);
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("visible", visible);
@@ -127,6 +135,8 @@ public class ProgressActivity extends AppCompatActivity {
     } // GetGrades()
 
     public void CreateTermContent(View v) {
+        Cursor c;
+        int id = termID + 1;
         courseName = (EditText) findViewById(R.id.edit_text_course_name);
         grade = (EditText) findViewById(R.id.edit_text_grade);
 
@@ -134,25 +144,42 @@ public class ProgressActivity extends AppCompatActivity {
         int number = Integer.parseInt(grade.getText().toString());
 
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
-        int id = termID + 1; // termID is index of array from main activity
-        db.execSQL("INSERT INTO tblGrade VALUES(?1, '" + name + "', " + number + ", " + id + ");");
+        //find total number of subject in this term
+        c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ id +" ", null);
+        if (c != null)
+            c.moveToFirst();
+        int total = Integer.parseInt(c.getString(0));
+
+        c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ id +" AND courseName == 'Dummy' ", null);
+        if (c != null)
+            c.moveToFirst();
+        int totalDummy = Integer.parseInt(c.getString(0));
+
+        // SELECT min(gradeID) FROM tblGrade where courseName = 'Dummy' AND termID = 9
+        // find the smallest grade ID to update
+        c = db.rawQuery("SELECT min(gradeID) FROM tblGrade WHERE courseName == 'Dummy' AND termID == "+ id +" ", null);
+        if (c != null)
+            c.moveToFirst();
+        int min_term_id = Integer.parseInt(c.getString(0));
+        if (totalDummy <= total){
+            //example: UPDATE tblGrade SET courseName = 'Biology', grade = '85' WHERE gradeID == 12
+            db.execSQL("UPDATE tblGrade SET courseName = '"+ name +"', grade = "+ number +" WHERE gradeID == "+ min_term_id +"");
+        }
+        else{
+            Toast.makeText(ProgressActivity.this,"no more place for course！", Toast.LENGTH_LONG).show();
+        }
         db.close();
 
         Intent refreshPage =
                 new Intent(ProgressActivity.this, ProgressActivity.class);
+        refreshPage.putExtra("termID", termID);
         startActivity(refreshPage);
+
     } // CreateTermContent()
 
 
     public void showTermContent() {
         TableLayout tl = (TableLayout) findViewById(R.id.displayTerm);
-        //TableRow.LayoutParams layoutParams = new TableRow.LayoutParams();
-        //TableRow.LayoutParams.MATCH_PARENT,
-        //TableRow.LayoutParams.MATCH_PARENT);
-        //layoutParams.gravity = Gravity.CENTER;
-        //layoutParams.leftMargin = 30;
-        //layoutParams.bottomMargin = 10;
-        //layoutParams.topMargin = 10;
 
         TableRow tbrow0 = new TableRow(this);
         tbrow0.setBackgroundColor(Color.LTGRAY);
