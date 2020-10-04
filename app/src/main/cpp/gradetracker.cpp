@@ -12,7 +12,7 @@ Java_com_trios_gradetracker_ProgressActivity_CalcGrades(
         jint toGoCount) {
 
     double offset = (goal * takenCount - takenTotal) / toGoCount;
-    offset =  round( offset * 100.0 ) / 100.0;
+    offset =  round( offset * 100.0 ) / 100.0; // round to two digit after float point
     string newTarget = to_string(goal + offset);
     return env->NewStringUTF(newTarget.c_str());
 }

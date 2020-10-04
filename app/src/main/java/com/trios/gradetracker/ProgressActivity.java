@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -31,10 +32,10 @@ public class ProgressActivity extends AppCompatActivity {
     private int visible = 0;
 
     ArrayList<String> courseNames = new ArrayList<>();
-    ArrayList<Integer> grades = new ArrayList<>();
-    String dummyName = "Dummy";
-    int dummyGrade = 67;
-    int totalCourses = 0;
+    ArrayList<Double> grades = new ArrayList<>();
+    //String dummyName = "Dummy";
+    //int dummyGrade = 67;
+    //int totalCourses = 0;
 
     private static EditText courseName;
     private static EditText grade;
@@ -110,7 +111,7 @@ public class ProgressActivity extends AppCompatActivity {
             if(c.moveToFirst()) {
                 do {
                     courseNames.add(c.getString(c.getColumnIndex("courseName")));
-                    grades.add(c.getInt(c.getColumnIndex("grade")));
+                    grades.add(c.getDouble(c.getColumnIndex("grade")));
                 }while(c.moveToNext());
             }
         }
@@ -123,6 +124,16 @@ public class ProgressActivity extends AppCompatActivity {
         double goal = termGoal;
         courseName = (EditText) findViewById(R.id.edit_text_course_name);
         grade = (EditText) findViewById(R.id.edit_text_grade);
+
+        if (TextUtils.isEmpty(courseName.getText().toString())) {
+            Toast.makeText(this, "course name is empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(grade.getText().toString())) {
+            Toast.makeText(this, "grade is empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         String name = courseName.getText().toString();
         int number = Integer.parseInt(grade.getText().toString());
@@ -256,7 +267,7 @@ public class ProgressActivity extends AppCompatActivity {
                 tableRow.setBackgroundColor(Color.WHITE);
             }
 
-            final int n = i;
+            //final int n = i;
             tableRow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

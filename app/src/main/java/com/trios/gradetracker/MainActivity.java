@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -120,6 +121,19 @@ public class MainActivity extends AppCompatActivity {
         numOfCourses = (EditText) findViewById(R.id.edit_text_num_of_courses);
         termGoal = (EditText) findViewById(R.id.edit_text_target_grade);
 
+        if (TextUtils.isEmpty(termName.getText().toString())) {
+            Toast.makeText(this, "term name is empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(numOfCourses.getText().toString())) {
+            Toast.makeText(this, "number of course is empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(termGoal.getText().toString())) {
+            Toast.makeText(this, "target grade is empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String name = termName.getText().toString();
         int number = Integer.parseInt(numOfCourses.getText().toString());
         int goal = Integer.parseInt(termGoal.getText().toString());
@@ -163,9 +177,9 @@ public class MainActivity extends AppCompatActivity {
     public void getTerms() {
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
 
-        String name = "Science";
-        int number = 8;
-        int goal = 99;
+        //String name = "Science";
+        //int number = 8;
+        //int goal = 99;
 
         Cursor c = db.rawQuery("SELECT * FROM tblTerm WHERE status = 'A'", null);
 
@@ -194,39 +208,10 @@ public class MainActivity extends AppCompatActivity {
                 } // if we can move to first
             } // if courses taken NOT null
         } // for - termIDs
-/*
-        for(int i = 0; i < termIDs.size(); i++) {
-            terms.add(termNames.get(i) + " [ " + takenCounts.get(i) + "/" + totalCourses.get(i) + " ]" +
-                    " goal: " + goals.get(i) + "%");
-        }
-*/
+
         db.close();
     } // getTerms()
-/*
-    public void listTerms() {
-        // add the terms(if any) to our listview
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, terms);
-        ListView listView = (ListView) findViewById(R.id.list_view_terms);
-        listView.setAdapter(adapter);
 
-        // Create a message handling object as an anonymous class.
-        listView.setOnItemClickListener(mMessageClickedHandler);
-    }
-
-    private AdapterView.OnItemClickListener mMessageClickedHandler =
-            new AdapterView.OnItemClickListener()
-            {
-                public void onItemClick(AdapterView parent, View v,
-                                        int position, long id)
-                {
-                    Intent gotoProgress =
-                            new Intent(MainActivity.this, ProgressActivity.class);
-                    gotoProgress.putExtra("termID", termIDs.get(position));
-                    startActivity(gotoProgress);
-                }
-            };
-*/
     @SuppressLint("SetTextI18n")
     public void showTable() {
         TableLayout  tl = (TableLayout) findViewById(R.id.displayTable);
@@ -323,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
                 tableRow.setBackgroundColor(Color.WHITE);
             }
 
-            final int n = i;
+            //final int n = i;
             tableRow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
