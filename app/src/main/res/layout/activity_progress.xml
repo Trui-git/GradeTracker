@@ -1,85 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical"
     tools:context="com.trios.gradetracker.ProgressActivity">
 
-    <TableLayout
-        android:id="@+id/displayTerm"
+
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="300dp"
-        android:stretchColumns="1,2,3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        android:layout_height="0dp"
+        android:layout_weight="0.55"
+        android:orientation="vertical">
 
-    </TableLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_grade"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginBottom="32dp"
-        android:src="@android:drawable/ic_menu_edit"
-        app:backgroundTint="#2196F3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.915"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/displayTerm"
-        app:layout_constraintVertical_bias="0.646" />
+        <TableLayout
+            android:id="@+id/displayTerm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1,2,3" />
+    </ScrollView>
 
     <LinearLayout
-        android:id="@+id/text_term_content_input"
-        android:layout_width="0dp"
-        android:layout_height="250dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="250dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="start"
-        android:orientation="vertical"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/displayTerm">
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="0.45"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/edit_text_course_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/courseName"
-            android:hint="@string/courseName"
-            android:inputType="text" />
+        <LinearLayout
+            android:id="@+id/text_term_content_input"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            tools:ignore="NestedWeights">
 
-        <EditText
-            android:id="@+id/edit_text_grade"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/grade"
-            android:hint="@string/grade"
-            android:inputType="number" />
+            <EditText
+                android:id="@+id/edit_text_course_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/courseName"
+                android:hint="@string/courseName"
+                android:inputType="text" />
 
-        <Button
-            android:id="@+id/create_term_content_button"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:onClick="CreateTermContent"
-            android:text="@string/CreateTermContent" />
+            <EditText
+                android:id="@+id/edit_text_grade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/grade"
+                android:hint="@string/grade"
+                android:inputType="number" />
+
+            <Button
+                android:id="@+id/create_term_content_button"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:onClick="CreateTermContent"
+                android:text="@string/CreateTermContent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_grade"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center|end"
+                android:layout_weight="2"
+                android:src="@android:drawable/ic_menu_edit"
+                app:backgroundTint="#2196F3" />
+        </LinearLayout>
 
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

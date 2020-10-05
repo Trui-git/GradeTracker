@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -56,8 +57,11 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             int mVisible = savedInstanceState.getInt("visible");
             if (mVisible == 1){
-                LinearLayout textInput = (LinearLayout) findViewById(R.id.text_input);
-                textInput.setVisibility(View.VISIBLE);
+                ((EditText) findViewById(R.id.edit_text_term_name)).setVisibility(View.VISIBLE);
+                ((EditText) findViewById(R.id.edit_text_num_of_courses)).setVisibility(View.VISIBLE);
+                ((EditText)findViewById(R.id.edit_text_target_grade)).setVisibility(View.VISIBLE);
+                ((Button)findViewById(R.id.create_button)).setVisibility(View.VISIBLE);
+                ((Button)findViewById(R.id.cancel_button)).setVisibility(View.VISIBLE);
                 visible = 1;
             }
         }
@@ -74,8 +78,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view)
                 {
-                    LinearLayout textInput = (LinearLayout) findViewById(R.id.text_input);
-                    textInput.setVisibility(View.VISIBLE);
+                    ((EditText) findViewById(R.id.edit_text_term_name)).setVisibility(View.VISIBLE);
+                    ((EditText) findViewById(R.id.edit_text_num_of_courses)).setVisibility(View.VISIBLE);
+                    ((EditText)findViewById(R.id.edit_text_target_grade)).setVisibility(View.VISIBLE);
+                    ((Button)findViewById(R.id.create_button)).setVisibility(View.VISIBLE);
+                    ((Button)findViewById(R.id.cancel_button)).setVisibility(View.VISIBLE);
                     visible = 1;
                 }
             });
@@ -115,6 +122,15 @@ public class MainActivity extends AppCompatActivity {
         db.close();
     }
 
+    public void CancelTerm(View v) {
+        ((EditText) findViewById(R.id.edit_text_term_name)).setVisibility(View.INVISIBLE);
+        ((EditText) findViewById(R.id.edit_text_num_of_courses)).setVisibility(View.INVISIBLE);
+        ((EditText)findViewById(R.id.edit_text_target_grade)).setVisibility(View.INVISIBLE);
+        ((Button)findViewById(R.id.create_button)).setVisibility(View.INVISIBLE);
+        ((Button)findViewById(R.id.cancel_button)).setVisibility(View.INVISIBLE);
+        visible = 0;
+        return;
+    }
     public void CreateTerm(View v) {
         Cursor c;
         termName = (EditText) findViewById(R.id.edit_text_term_name);
@@ -225,6 +241,8 @@ public class MainActivity extends AppCompatActivity {
 
         TableRow tbrow0 = new TableRow(this);
         tbrow0.setBackgroundColor(Color.LTGRAY);
+        //tbrow0.setWeightSum(4f);
+
         TextView tv0 = new TextView(this);
         tv0.setText(" Term ");
         tv0.setTextColor(Color.BLACK);
@@ -264,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
 
             TableRow tableRow = new TableRow(this);
             tableRow.setClickable(true);
+            //tableRow.setWeightSum(4f);
 
             TextView t1v = new TextView(this);
             t1v.setText(termNames.get(i));

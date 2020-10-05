@@ -4,26 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="10dp"
     tools:context="com.trios.gradetracker.MainActivity">
 
-    <TableLayout
-        android:id="@+id/displayTable"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="300dp"
-        android:stretchColumns="1,2,3,4"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/hGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/edit_text_term_name_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/edit_text_num_of_courses_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/edit_text_target_grade_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <ScrollView
+        android:id="@+id/displayScrollTable"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toTopOf="@id/hGuideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="0.695">
 
-    </TableLayout>
 
+        <HorizontalScrollView
+            android:id="@+id/displayHscrollTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="horizontal">
+
+            <TableLayout
+                android:id="@+id/displayTable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1,2,3,4" />
+
+        </HorizontalScrollView>
+
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -31,67 +77,81 @@
         android:layout_height="56dp"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginBottom="32dp"
         android:src="@android:drawable/ic_menu_edit"
         app:backgroundTint="#2196F3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.915"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/displayTable"
-        app:layout_constraintVertical_bias="0.646" />
+        app:layout_constraintHorizontal_bias="0.468"
+        app:layout_constraintStart_toStartOf="@+id/vGuideline"
+        app:layout_constraintTop_toBottomOf="@id/hGuideline"
+        app:layout_constraintVertical_bias="0.472" />
 
-    <LinearLayout
-        android:id="@+id/text_input"
+
+    <EditText
+        android:id="@+id/edit_text_term_name"
         android:layout_width="0dp"
-        android:layout_height="250dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="200dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="start"
-        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:autofillHints="@string/termName"
+        android:hint="@string/termName"
+        android:inputType="text"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/edit_text_term_name_guideline"
+        app:layout_constraintEnd_toStartOf="@+id/vGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hGuideline" />
+
+    <EditText
+        android:id="@+id/edit_text_num_of_courses"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autofillHints="@string/numberOFCourses"
+        android:hint="@string/numberOFCourses"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/edit_text_num_of_courses_guideline"
+        app:layout_constraintEnd_toStartOf="@+id/vGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_text_term_name_guideline" />
+
+    <EditText
+        android:id="@+id/edit_text_target_grade"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autofillHints="@string/targetGrade"
+        android:hint="@string/targetGrade"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/edit_text_target_grade_guideline"
+        app:layout_constraintEnd_toStartOf="@+id/vGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_text_num_of_courses_guideline" />
+
+    <Button
+        android:id="@+id/create_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="CreateTerm"
+        android:text="@string/createTerm"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/vGuideline"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/displayTable">
+        app:layout_constraintTop_toBottomOf="@id/edit_text_target_grade_guideline"
+        app:layout_constraintVertical_bias="0.5" />
 
-        <EditText
-            android:id="@+id/edit_text_term_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/termName"
-            android:hint="@string/termName"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/edit_text_num_of_courses"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/numberOFCourses"
-            android:hint="@string/numberOFCourses"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/edit_text_target_grade"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/targetGrade"
-            android:hint="@string/targetGrade"
-            android:inputType="number" />
-
-        <Button
-            android:id="@+id/create_button"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:onClick="CreateTerm"
-            android:text="@string/createTerm" />
-
-    </LinearLayout>
-
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="CancelTerm"
+        android:text="@string/cancelTerm"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/vGuideline"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_text_target_grade_guideline"
+        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
