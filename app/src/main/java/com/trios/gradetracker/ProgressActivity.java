@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -49,8 +50,10 @@ public class ProgressActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             int mVisible = savedInstanceState.getInt("visible");
             if (mVisible == 1){
-                LinearLayout textInput = (LinearLayout) findViewById(R.id.text_term_content_input);
-                textInput.setVisibility(View.VISIBLE);
+                ((EditText) findViewById(R.id.edit_text_course_name)).setVisibility(View.VISIBLE);
+                ((EditText) findViewById(R.id.edit_text_grade)).setVisibility(View.VISIBLE);
+                ((Button)findViewById(R.id.create_term_content_button)).setVisibility(View.VISIBLE);
+                ((Button)findViewById(R.id.cancel_term_content_button)).setVisibility(View.VISIBLE);
                 visible = 1;
             }
         }
@@ -75,8 +78,10 @@ public class ProgressActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view)
                     {
-                        LinearLayout textInput = (LinearLayout) findViewById(R.id.text_term_content_input);
-                        textInput.setVisibility(View.VISIBLE);
+                        ((EditText) findViewById(R.id.edit_text_course_name)).setVisibility(View.VISIBLE);
+                        ((EditText) findViewById(R.id.edit_text_grade)).setVisibility(View.VISIBLE);
+                        ((Button)findViewById(R.id.create_term_content_button)).setVisibility(View.VISIBLE);
+                        ((Button)findViewById(R.id.cancel_term_content_button)).setVisibility(View.VISIBLE);
                         visible = 1;
                     }
                 });
@@ -84,8 +89,6 @@ public class ProgressActivity extends AppCompatActivity {
         GetGrades();
         showTermContent();
     }
-
-
 
     @Override
     // close app
@@ -117,6 +120,15 @@ public class ProgressActivity extends AppCompatActivity {
         }
         db.close();
     } // GetGrades()
+
+    public void CancelTermContent(View v) {
+        ((EditText) findViewById(R.id.edit_text_course_name)).setVisibility(View.INVISIBLE);
+        ((EditText) findViewById(R.id.edit_text_grade)).setVisibility(View.INVISIBLE);
+        ((Button)findViewById(R.id.create_term_content_button)).setVisibility(View.INVISIBLE);
+        ((Button)findViewById(R.id.cancel_term_content_button)).setVisibility(View.INVISIBLE);
+        visible = 0;
+        return;
+    }
 
     public void CreateTermContent(View v) {
         Cursor c;

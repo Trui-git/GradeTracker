@@ -23,7 +23,7 @@
             android:stretchColumns="1,2,3" />
     </ScrollView>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
@@ -32,57 +32,116 @@
         android:baselineAligned="false"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/text_term_content_input"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.8"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vProg_Guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="invisible"
-            tools:ignore="NestedWeights">
+            app:layout_constraintGuide_percent="0.75" />
 
-            <EditText
-                android:id="@+id/edit_text_course_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints="@string/courseName"
-                android:hint="@string/courseName"
-                android:inputType="text" />
 
-            <EditText
-                android:id="@+id/edit_text_grade"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints="@string/grade"
-                android:hint="@string/grade"
-                android:inputType="number" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/hProg_Guidline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
 
-            <Button
-                android:id="@+id/create_term_content_button"
-                android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:onClick="CreateTermContent"
-                android:text="@string/CreateTermContent" />
-        </LinearLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/edit_text_course_name_guidline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.65"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/edit_text_grade_guidline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/create_term_content_button_guidline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.7" />
+
+        <EditText
+            android:id="@+id/edit_text_course_name"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.2"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:autofillHints="@string/courseName"
+            android:hint="@string/courseName"
+            android:inputType="text"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/edit_text_course_name_guidline"
+            app:layout_constraintEnd_toStartOf="@id/vProg_Guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hProg_Guidline" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_grade"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_gravity="center|end"
-                android:layout_weight="2"
-                android:src="@android:drawable/ic_menu_edit"
-                app:backgroundTint="#2196F3" />
-        </LinearLayout>
+        <EditText
+            android:id="@+id/edit_text_grade"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:autofillHints="@string/grade"
+            android:hint="@string/grade"
+            android:inputType="number"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/edit_text_grade_guidline"
+            app:layout_constraintEnd_toStartOf="@id/vProg_Guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_course_name_guidline" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/create_term_content_button"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:onClick="CreateTermContent"
+            android:text="@string/CreateTermContent"
+            android:visibility="invisible"
+            app:layout_constraintHorizontal_bias="0.25"
+            app:layout_constraintBottom_toTopOf="@id/create_term_content_button_guidline"
+            app:layout_constraintEnd_toStartOf="@id/vProg_Guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_grade_guidline" />
+
+        <Button
+            android:id="@+id/cancel_term_content_button"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:onClick="CancelTermContent"
+            android:text="@string/cancelTerm"
+            android:visibility="invisible"
+            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintBottom_toTopOf="@id/create_term_content_button_guidline"
+            app:layout_constraintEnd_toStartOf="@id/vProg_Guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_grade_guidline" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_grade"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:src="@android:drawable/ic_menu_edit"
+            app:backgroundTint="#2196F3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/vProg_Guideline"
+            app:layout_constraintTop_toBottomOf="@id/hProg_Guidline"
+            app:layout_constraintVertical_bias="0.5"
+            tools:layout_constraintLeft_toRightOf="@id/vProg_Guideline" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
