@@ -186,7 +186,6 @@ public class ProgressActivity extends AppCompatActivity {
         //private native String CalcGrades(double goal, int takenCount, int takenTotal, int toGoCount);
         String newTarget = CalcGrades(goal, takenCount, takenTotal, toGocount);
         db.execSQL("UPDATE tblGrade SET grade = "+ Float.parseFloat(newTarget) +" WHERE termID == "+ id +" AND courseName == 'Dummy'");
-
         db.close();
 
         Intent refreshPage =
@@ -229,6 +228,15 @@ public class ProgressActivity extends AppCompatActivity {
 
         tl.addView(tbrow0);
 
+        // get term name from termID
+        String name;
+        db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
+        int id = termID + 1; // termID is index of array from main activity
+        Cursor c = db.rawQuery("SELECT name FROM tblTerm WHERE termID = " + id, null);
+        if (c != null)
+            c.moveToFirst();
+        name = c.getString(0);
+        db.close();
 
         for (int i = 0; i < courseNames.size(); i++) {
 
@@ -236,8 +244,7 @@ public class ProgressActivity extends AppCompatActivity {
             tableRow.setClickable(true);
 
             TextView t1v = new TextView(this);
-            int id = termID + 1;
-            t1v.setText("Term " + id);
+            t1v.setText(name);
             t1v.setTextColor(Color.BLACK);
             t1v.setGravity(Gravity.CENTER);
             t1v.setTextSize(20);

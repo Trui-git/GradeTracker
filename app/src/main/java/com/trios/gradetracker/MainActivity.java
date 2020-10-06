@@ -192,17 +192,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void getTerms() {
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
-
-        //String name = "Science";
-        //int number = 8;
-        //int goal = 99;
-
         Cursor c = db.rawQuery("SELECT * FROM tblTerm WHERE status = 'A'", null);
 
         if(c != null) {
             if(c.moveToFirst()) {
                 do {
-                    termIDs.add(c.getColumnIndex("termID"));
+                    termIDs.add(c.getInt(c.getColumnIndex("termID")));
                     termNames.add(c.getString(c.getColumnIndex("name")));
                     totalCourses.add(c.getString(c.getColumnIndex("courses")));
                     goals.add(c.getString(c.getColumnIndex("goal")));
@@ -214,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < termIDs.size(); i++) {
             int termID = termIDs.get(i);
             Cursor coursesTaken = db.rawQuery(
-                    "SELECT COUNT(courseName) AS courseTaken FROM tblGrade WHERE courseName != 'dummy' AND termID = " +
+                    "SELECT COUNT(courseName) AS courseTaken FROM tblGrade WHERE courseName != 'Dummy' AND termID = " +
                             termID, null);
             if(coursesTaken != null) {
                 if(coursesTaken.moveToFirst()) {
@@ -231,14 +226,6 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void showTable() {
         TableLayout  tl = (TableLayout) findViewById(R.id.displayTable);
-        //TableRow.LayoutParams layoutParams = new TableRow.LayoutParams();
-                //TableRow.LayoutParams.MATCH_PARENT,
-                //TableRow.LayoutParams.MATCH_PARENT);
-        //layoutParams.gravity = Gravity.CENTER;
-        //layoutParams.leftMargin = 30;
-        //layoutParams.bottomMargin = 10;
-        //layoutParams.topMargin = 10;
-
         TableRow tbrow0 = new TableRow(this);
         tbrow0.setBackgroundColor(Color.LTGRAY);
         //tbrow0.setWeightSum(4f);
@@ -319,21 +306,21 @@ public class MainActivity extends AppCompatActivity {
             tableRow.setId(i);
             tl.addView(tableRow);
 
-
-            //tableRow.addView(t1v, layoutParams);
             if (i % 2 != 0) {
                 tableRow.setBackgroundColor(Color.LTGRAY);
             } else {
                 tableRow.setBackgroundColor(Color.WHITE);
             }
 
-            //final int n = i;
             tableRow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int tableId = v.getId();
                     Intent gotoProgress =
                             new Intent(MainActivity.this, ProgressActivity.class);
+                    // should look at tableID to find its termID from tblTerm
+                    // but it is here accidentally termID = tableID + 1,
+                    // it is assuming table tblTerm is never be manipulated
                     gotoProgress.putExtra("termID", tableId);
                     gotoProgress.putExtra("goal", Integer.parseInt(goals.get(tableId)));
                     startActivity(gotoProgress);

@@ -26,7 +26,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
         android:layout_weight="0.45"
         android:baselineAligned="false"
@@ -45,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.1" />
+            app:layout_constraintGuide_percent="0" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/edit_text_course_name_guidline"
@@ -60,14 +59,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
+            app:layout_constraintGuide_percent="0.6" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/create_term_content_button_guidline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.7" />
+            app:layout_constraintGuide_percent="0.9" />
 
         <EditText
             android:id="@+id/edit_text_course_name"
@@ -76,6 +75,7 @@
             android:autofillHints="@string/courseName"
             android:hint="@string/courseName"
             android:inputType="text"
+            android:minHeight="100dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@id/edit_text_course_name_guidline"
             app:layout_constraintEnd_toStartOf="@id/vProg_Guideline"
@@ -89,6 +89,7 @@
             android:autofillHints="@string/grade"
             android:hint="@string/grade"
             android:inputType="number"
+            android:minHeight="100dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@id/edit_text_grade_guidline"
             app:layout_constraintEnd_toStartOf="@id/vProg_Guideline"
@@ -104,9 +105,9 @@
             android:onClick="CreateTermContent"
             android:text="@string/CreateTermContent"
             android:visibility="invisible"
-            app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintBottom_toTopOf="@id/create_term_content_button_guidline"
             app:layout_constraintEnd_toStartOf="@id/vProg_Guideline"
+            app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_text_grade_guidline" />
 
@@ -119,9 +120,9 @@
             android:onClick="CancelTermContent"
             android:text="@string/cancelTerm"
             android:visibility="invisible"
-            app:layout_constraintHorizontal_bias="0.75"
             app:layout_constraintBottom_toTopOf="@id/create_term_content_button_guidline"
             app:layout_constraintEnd_toStartOf="@id/vProg_Guideline"
+            app:layout_constraintHorizontal_bias="0.75"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_text_grade_guidline" />
 
