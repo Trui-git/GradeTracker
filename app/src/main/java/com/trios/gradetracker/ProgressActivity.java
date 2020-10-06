@@ -78,11 +78,25 @@ public class ProgressActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view)
                     {
-                        ((EditText) findViewById(R.id.edit_text_course_name)).setVisibility(View.VISIBLE);
-                        ((EditText) findViewById(R.id.edit_text_grade)).setVisibility(View.VISIBLE);
-                        ((Button)findViewById(R.id.create_term_content_button)).setVisibility(View.VISIBLE);
-                        ((Button)findViewById(R.id.cancel_term_content_button)).setVisibility(View.VISIBLE);
-                        visible = 1;
+                        db = openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
+                        //find total number of subject in this term
+                        int id = termID + 1;
+                        Cursor c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ id +" ", null);
+                        c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ id +" AND courseName == 'Dummy' ", null);
+                        if (c != null){
+                            c.moveToFirst();
+                            int DummyItems = Integer.parseInt(c.getString(0));
+                            if(DummyItems != 0){
+                                ((EditText) findViewById(R.id.edit_text_course_name)).setVisibility(View.VISIBLE);
+                                ((EditText) findViewById(R.id.edit_text_grade)).setVisibility(View.VISIBLE);
+                                ((Button)findViewById(R.id.create_term_content_button)).setVisibility(View.VISIBLE);
+                                ((Button)findViewById(R.id.cancel_term_content_button)).setVisibility(View.VISIBLE);
+                                visible = 1;
+                            }
+                            else{
+                                Toast.makeText(ProgressActivity.this,"no more place for course！", Toast.LENGTH_LONG).show();
+                            }
+                        }
                     }
                 });
 
@@ -149,43 +163,49 @@ public class ProgressActivity extends AppCompatActivity {
 
         String name = courseName.getText().toString();
         int number = Integer.parseInt(grade.getText().toString());
+        int totalDummy = 0;
+        int total = 0;
 
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
         //find total number of subject in this term
         c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ id +" ", null);
-        if (c != null)
+        if (c != null){
             c.moveToFirst();
-        int total = Integer.parseInt(c.getString(0));
-
+            total = Integer.parseInt(c.getString(0));
+        }
         c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ id +" AND courseName == 'Dummy' ", null);
-        if (c != null)
+        if (c != null){
             c.moveToFirst();
-        int totalDummy = Integer.parseInt(c.getString(0));
+            totalDummy = Integer.parseInt(c.getString(0));
+        }
 
         // SELECT min(gradeID) FROM tblGrade where courseName = 'Dummy' AND termID = 9
         // find the smallest grade ID to update
         c = db.rawQuery("SELECT min(gradeID) FROM tblGrade WHERE courseName == 'Dummy' AND termID == "+ id +" ", null);
-        if (c != null)
+        if (c != null && totalDummy != 0){
             c.moveToFirst();
-        int min_term_id = Integer.parseInt(c.getString(0));
-        if (totalDummy <= total){
-            //example: UPDATE tblGrade SET courseName = 'Biology', grade = '85' WHERE gradeID == 12
-            db.execSQL("UPDATE tblGrade SET courseName = '"+ name +"', grade = "+ number +" WHERE gradeID == "+ min_term_id +"");
-        }
-        else{
-            Toast.makeText(ProgressActivity.this,"no more place for course！", Toast.LENGTH_LONG).show();
+            int min_term_id = Integer.parseInt(c.getString(0));
+            if (totalDummy <= total){
+                //example: UPDATE tblGrade SET courseName = 'Biology', grade = '85' WHERE gradeID == 12
+                db.execSQL("UPDATE tblGrade SET courseName = '"+ name +"', grade = "+ number +" WHERE gradeID == "+ min_term_id +"");
+            }
+            else{
+                Toast.makeText(ProgressActivity.this,"no more place for course！", Toast.LENGTH_LONG).show();
+            }
         }
 
         c = db.rawQuery("SELECT sum(grade) FROM tblGrade WHERE termID == "+ id +" AND courseName != 'Dummy' ", null);
-        if (c != null)
+        if (c != null && totalDummy > 1) {
             c.moveToFirst();
-        int takenTotal = Integer.parseInt(c.getString(0));
-        int takenCount = total - (totalDummy-1);
-        int toGocount = totalDummy - 1;
-        //call to a native method
-        //private native String CalcGrades(double goal, int takenCount, int takenTotal, int toGoCount);
-        String newTarget = CalcGrades(goal, takenCount, takenTotal, toGocount);
-        db.execSQL("UPDATE tblGrade SET grade = "+ Float.parseFloat(newTarget) +" WHERE termID == "+ id +" AND courseName == 'Dummy'");
+            int takenTotal = Integer.parseInt(c.getString(0));
+            int takenCount = total - (totalDummy-1);
+            int toGocount = totalDummy - 1;
+            //call to a native method
+            //private native String CalcGrades(double goal, int takenCount, int takenTotal, int toGoCount);
+            String newTarget = CalcGrades(goal, takenCount, takenTotal, toGocount);
+            db.execSQL("UPDATE tblGrade SET grade = "+ Float.parseFloat(newTarget) +" WHERE termID == "+ id +" AND courseName == 'Dummy'");
+        }
+
         db.close();
 
         Intent refreshPage =
