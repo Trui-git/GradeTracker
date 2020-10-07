@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.55"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:scrollbars="vertical">
 
         <TableLayout
             android:id="@+id/displayTerm"
@@ -102,8 +103,8 @@
             android:layout_height="38dp"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:onClick="CreateTermContent"
-            android:text="@string/CreateTermContent"
+            android:onClick="AddTermContent"
+            android:text="@string/AddTermContent"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@id/create_term_content_button_guidline"
             app:layout_constraintEnd_toStartOf="@id/vProg_Guideline"

@@ -10,6 +10,6 @@
 
     <string name="courseName">enter course name</string>
     <string name="grade">enter grade</string>
-    <string name="CreateTermContent">Create</string>
+    <string name="AddTermContent">Add</string>
 
 </resources>

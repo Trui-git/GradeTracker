@@ -144,7 +144,7 @@ public class ProgressActivity extends AppCompatActivity {
         return;
     }
 
-    public void CreateTermContent(View v) {
+    public void AddTermContent(View v) {
         Cursor c;
         int id = termID + 1;
         double goal = termGoal;
@@ -239,7 +239,8 @@ public class ProgressActivity extends AppCompatActivity {
         tbrow0.addView(tv1);
 
         TextView tv2 = new TextView(this);
-        tv2.setText(" Grade ");
+        String gradeTitle = "Grade (Goal: " + termGoal + "%)";
+        tv2.setText(gradeTitle);
         tv2.setTextColor(Color.BLACK);
         tv2.setGravity(Gravity.CENTER);
         tv2.setTextSize(20);
