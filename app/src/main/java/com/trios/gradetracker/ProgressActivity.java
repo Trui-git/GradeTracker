@@ -80,9 +80,8 @@ public class ProgressActivity extends AppCompatActivity {
                     {
                         db = openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
                         //find total number of subject in this term
-                        int id = termID + 1;
-                        Cursor c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ id +" ", null);
-                        c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ id +" AND courseName == 'Dummy' ", null);
+                        //Cursor c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ termID +" ", null);
+                        Cursor c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ termID +" AND courseName == 'Dummy' ", null);
                         if (c != null){
                             c.moveToFirst();
                             int DummyItems = Integer.parseInt(c.getString(0));
@@ -119,10 +118,9 @@ public class ProgressActivity extends AppCompatActivity {
 
     public void GetGrades() {
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
-        int id = termID + 1; // termID is index of array from main activity
         Cursor c = db.rawQuery(
                 "SELECT * FROM tblGrade WHERE termID = " +
-                        id, null);
+                        termID, null);
 
         if(c != null) {
             if(c.moveToFirst()) {
@@ -146,7 +144,6 @@ public class ProgressActivity extends AppCompatActivity {
 
     public void AddTermContent(View v) {
         Cursor c;
-        int id = termID + 1;
         double goal = termGoal;
         courseName = (EditText) findViewById(R.id.edit_text_course_name);
         grade = (EditText) findViewById(R.id.edit_text_grade);
@@ -163,17 +160,22 @@ public class ProgressActivity extends AppCompatActivity {
 
         String name = courseName.getText().toString();
         int number = Integer.parseInt(grade.getText().toString());
+        if (number <= 0){
+            Toast.makeText(this, "grade must be more than 0", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         int totalDummy = 0;
         int total = 0;
 
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
         //find total number of subject in this term
-        c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ id +" ", null);
+        c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ termID +" ", null);
         if (c != null){
             c.moveToFirst();
             total = Integer.parseInt(c.getString(0));
         }
-        c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ id +" AND courseName == 'Dummy' ", null);
+        c = db.rawQuery("SELECT count(gradeID) FROM tblGrade WHERE termID == "+ termID +" AND courseName == 'Dummy' ", null);
         if (c != null){
             c.moveToFirst();
             totalDummy = Integer.parseInt(c.getString(0));
@@ -181,7 +183,7 @@ public class ProgressActivity extends AppCompatActivity {
 
         // SELECT min(gradeID) FROM tblGrade where courseName = 'Dummy' AND termID = 9
         // find the smallest grade ID to update
-        c = db.rawQuery("SELECT min(gradeID) FROM tblGrade WHERE courseName == 'Dummy' AND termID == "+ id +" ", null);
+        c = db.rawQuery("SELECT min(gradeID) FROM tblGrade WHERE courseName == 'Dummy' AND termID == "+ termID +" ", null);
         if (c != null && totalDummy != 0){
             c.moveToFirst();
             int min_term_id = Integer.parseInt(c.getString(0));
@@ -194,7 +196,7 @@ public class ProgressActivity extends AppCompatActivity {
             }
         }
 
-        c = db.rawQuery("SELECT sum(grade) FROM tblGrade WHERE termID == "+ id +" AND courseName != 'Dummy' ", null);
+        c = db.rawQuery("SELECT sum(grade) FROM tblGrade WHERE termID == "+ termID +" AND courseName != 'Dummy' ", null);
         if (c != null && totalDummy > 1) {
             c.moveToFirst();
             int takenTotal = Integer.parseInt(c.getString(0));
@@ -203,7 +205,7 @@ public class ProgressActivity extends AppCompatActivity {
             //call to a native method
             //private native String CalcGrades(double goal, int takenCount, int takenTotal, int toGoCount);
             String newTarget = CalcGrades(goal, takenCount, takenTotal, toGocount);
-            db.execSQL("UPDATE tblGrade SET grade = "+ Float.parseFloat(newTarget) +" WHERE termID == "+ id +" AND courseName == 'Dummy'");
+            db.execSQL("UPDATE tblGrade SET grade = "+ Float.parseFloat(newTarget) +" WHERE termID == "+ termID +" AND courseName == 'Dummy'");
         }
 
         db.close();
@@ -252,8 +254,8 @@ public class ProgressActivity extends AppCompatActivity {
         // get term name from termID
         String name;
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
-        int id = termID + 1; // termID is index of array from main activity
-        Cursor c = db.rawQuery("SELECT name FROM tblTerm WHERE termID = " + id, null);
+        //int id = termID + 1; // termID is index of array from main activity
+        Cursor c = db.rawQuery("SELECT name FROM tblTerm WHERE termID = " + termID, null);
         if (c != null)
             c.moveToFirst();
         name = c.getString(0);

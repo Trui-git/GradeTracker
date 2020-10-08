@@ -29,6 +29,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
+import static java.lang.Math.round;
+
 public class MainActivity extends AppCompatActivity {
 
     private SQLiteDatabase db = null;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> termNames = new ArrayList<>();
     ArrayList<String> takenCounts = new ArrayList<>();
     ArrayList<String> totalCourses = new ArrayList<>();
+    ArrayList<String> averageGrades = new ArrayList<>();
     ArrayList<String> goals = new ArrayList<>();
     //private ArrayList<String> terms = new ArrayList<>();
 
@@ -154,6 +157,16 @@ public class MainActivity extends AppCompatActivity {
         int number = Integer.parseInt(numOfCourses.getText().toString());
         int goal = Integer.parseInt(termGoal.getText().toString());
 
+        if (number <= 0){
+            Toast.makeText(this, "There must be at least one course", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (goal <= 0){
+            Toast.makeText(this, "Goal must be more than 0", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         db = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
 
         // check this term name exits, if exits don't insert
@@ -208,6 +221,24 @@ public class MainActivity extends AppCompatActivity {
         // lastly, let's get the courses taken counts
         for(int i = 0; i < termIDs.size(); i++) {
             int termID = termIDs.get(i);
+            double takenTotal = 0;
+            int takenCount = 0;
+            c = db.rawQuery("SELECT sum(grade) FROM tblGrade WHERE termID == "+ termID +" AND courseName != 'Dummy' ", null);
+            if (c != null) {
+                c.moveToFirst();
+                String sum = c.getString(0);
+                if (sum != null)
+                    takenTotal = Double.parseDouble(c.getString(0));
+            }
+
+            c = db.rawQuery("SELECT COUNT(courseName) AS courseTaken FROM tblGrade WHERE courseName != 'Dummy' AND termID = " + termID, null);
+            if (c != null) {
+                c.moveToFirst();
+                takenCount = Integer.parseInt(c.getString(0));
+            }
+            double average =  round( takenTotal/takenCount * 100.0 ) / 100.0;
+            averageGrades.add(String.valueOf(average));
+
             Cursor coursesTaken = db.rawQuery(
                     "SELECT COUNT(courseName) AS courseTaken FROM tblGrade WHERE courseName != 'Dummy' AND termID = " +
                             termID, null);
@@ -239,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
         tbrow0.addView(tv0);
 
         TextView tv1 = new TextView(this);
-        tv1.setText(" Course Done ");
+        tv1.setText(" Done/ToGo ");
         tv1.setTextColor(Color.BLACK);
         tv1.setGravity(Gravity.CENTER);
         tv1.setTextSize(20);
@@ -247,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         tbrow0.addView(tv1);
 
         TextView tv2 = new TextView(this);
-        tv2.setText(" Course To Go ");
+        tv2.setText(" Average Grade ");
         tv2.setTextColor(Color.BLACK);
         tv2.setGravity(Gravity.CENTER);
         tv2.setTextSize(20);
@@ -280,7 +311,8 @@ public class MainActivity extends AppCompatActivity {
             tableRow.addView(t1v);
 
             TextView t2v = new TextView(this);
-            t2v.setText(takenCounts.get(i));
+            String text = takenCounts.get(i) + "/" + totalCourses.get(i);
+            t2v.setText(text);
             t2v.setTextColor(Color.BLACK);
             t2v.setGravity(Gravity.CENTER);
             t2v.setTextSize(20);
@@ -288,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
             tableRow.addView(t2v);
 
             TextView t3v = new TextView(this);
-            t3v.setText(totalCourses.get(i));
+            t3v.setText(averageGrades.get(i));
             t3v.setTextColor(Color.BLACK);
             t3v.setGravity(Gravity.CENTER);
             t3v.setTextSize(20);
@@ -321,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
                     // should look at tableID to find its termID from tblTerm
                     // but it is here accidentally termID = tableID + 1,
                     // it is assuming table tblTerm is never be manipulated
-                    gotoProgress.putExtra("termID", tableId);
+                    gotoProgress.putExtra("termID", termIDs.get(tableId));
                     gotoProgress.putExtra("goal", Integer.parseInt(goals.get(tableId)));
                     startActivity(gotoProgress);
                 }
