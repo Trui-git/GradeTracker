@@ -17,11 +17,19 @@
         android:orientation="vertical"
         android:scrollbars="vertical">
 
-        <TableLayout
-            android:id="@+id/displayTerm"
+        <HorizontalScrollView
+            android:id="@+id/HscrollTable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:stretchColumns="1,2,3" />
+            android:fillViewport="true"
+            android:scrollbars="horizontal">
+
+            <TableLayout
+                android:id="@+id/displayTerm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1,2,3" />
+        </HorizontalScrollView>
     </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
